@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { store } from './store/store'
 import { routes } from "./routes.js"
+import { store } from "./store/store"
 import App from './App.vue'
 import VueFirestore from 'vue-firestore'
-import Firebase from './firebase'
-import { auth } from './firebase'
+
 
 
 Vue.use(VueFirestore);
@@ -21,17 +20,11 @@ router.beforeEach((to, from, next) => {
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
 	if(requiresAuth && !currentUser){
-			next('/login');
+			next('login');
+	} else if(!requiresAuth && currentUser){
+			next('timeline')
 	}else{
 			next();
-	}
-});
-
-auth.onAuthStateChanged((user) => {
-	if (user) {
-		 store.commit("startUserSession",user)
-	}else{
-			store.commit("removeUserSession", null)
 	}
 });
 
@@ -39,6 +32,5 @@ auth.onAuthStateChanged((user) => {
 new Vue({
 el: '#app',
 router,
-store,
 render: h => h(App)
 });

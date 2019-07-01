@@ -17,7 +17,7 @@
        <div class="card-body">
         <span class="card-title"><h6>👁‍🗨 {{post.place}}</h6></span><br>
         <p class="card-text">{{post.description}}</p>
-        <span class="card-text"><small>{{post.user}}</small></span>
+        <span class="card-text"><small>{{post.user.user}}</small></span>
       </div>
     </div>
     <div class="col-sm-2">

@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     user: null,
+    token: localStorage.getItem('token') || '',
     posts: []
   },
   mutations: {
@@ -23,25 +24,16 @@ export const store = new Vuex.Store({
       state.user = null
     }
   },
+  //para acciones como axios
   actions: {
-    async getPosts(context){
-      let postURL = "http://localhost:5000/api/posts/"
-      let response = await axios.get(postURL);
-      let data = response.data
-
-      context.commit("setPost", data)
-    },
-    async postPosts(context){
-      let postURL = "http://localhost:5000/api/posts/"
-      let response = await axios.post(postURL);
-      let data = response.data
-
-      context.commit("setPost", data)
-    }
+    
   },
+  //computed properties
   getters: {
-    isAuthUser(state, getters){
-      return (state.user !== null)
+    isAuthUser: state => !!state.token,
+    authStatus: state => state.user
+
+    // isAuthUser(state, getters){
+    //   return (state.user !== null)
    }
-  }
-})
+  })

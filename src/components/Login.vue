@@ -6,7 +6,7 @@
             <form class="form-signin" @submit.prevent="login">
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus
-                       v-model="email">
+                         v-model="email">
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required
                        v-model="password">
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Login</button>
@@ -19,9 +19,11 @@
 
 <script>
 
-    import {auth} from '../firebase'
+    //import Firebase from '../firebase'
+    import axios from 'axios'
 
     export default {
+        name: "login",
         data() {
             return {
                 email: "",
@@ -30,20 +32,28 @@
         },
         methods: {
             login() {
-                auth.signInWithEmailAndPassword(this.email, this.password)
-                    .then((user) => {
-                            alert('¡Muy bien! ¡Ya estamos dentro!')
-                            this.$router.replace("/timeline")
-                        },
-                        (error) => {
-                            alert('La que has liao pollito' + error.message)
-                        })
+                let user = {
+                    email: this.email,
+                    password: this.password
+                }
+                axios.post('http://localhost:5000/api/auth/login', user)
+                    .then(res => {
+                    //if successfull
+                    if (res.status === 200) {
+                        console.log(res.data)
+                        localStorage.setItem('token', res.data.token);
+                        this.$router.push('/');
+                    }
+                    }, err => {
+                    alert(err.response);
+                    //this.error = err.response.data.error
+                    })
+                }
             },
             signUp() {
                 this.$router.replace("/signUp")
             }
         }
-    }
 </script>
 
 

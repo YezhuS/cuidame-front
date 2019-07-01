@@ -2,6 +2,11 @@
 <div>
 	<form class="col-6">
 		<div class="form-group row">
+			<div class="col-sm-9">
+				<input type="hidden" name="" id="user" class="form-control" v-model='data.user'>
+			</div>
+		</div>
+		<div class="form-group row">
 			<label for="" class="col-sm-3">Título</label>
 			<div class="col-sm-9">
 				<input type="text" name="" id="head" class="form-control" v-model='news.title'>
@@ -58,22 +63,33 @@ let emptyNew = {
 	rol: "",
 	description: ""
 }
-
 	export default {
 
 		data(){
 			return{
 				news: JSON.parse(JSON.stringify(emptyNew)),
 				posts:[],
+				data: {
+					user: ""
+				},
 				error:''
 			}
+		},
+		async created(){
+			await	axios.get('http://localhost:5000/api/users/')
+				.then(response => {
+					this.data.user = JSON.stringify(response.data[0].user.user)
+				})
+				.catch(err => {
+
+				})
 		},
 		methods:{
 		 	created(){
 			 axios.post('http://localhost:5000/api/posts/', {
 				title: document.getElementById('head').value,
 				type: document.getElementById('type').value,
-				user: "pepe00",//document.getElementById('user'),
+				//user: "document.getElementById('user').value",
 				description: document.getElementById('description').value,
 				place: document.getElementById('place').value,
 				enabled: true

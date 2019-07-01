@@ -6,11 +6,11 @@
             <form class="form-signin" @submit.prevent="signup">
                 <span id="reauth-email" class="reauth-email"></span>
                  <input type="text" id="inputUser" class="form-control" placeholder="User" required autofocus
-                       v-model="user">
+                       v-model="data.user">
                 <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus
-                       v-model="email">
+                       v-model="data.email">
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required
-                       v-model="password">
+                       v-model="data.password">
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Create</button>
                 <button class="btn btn-lg btn-primary btn-block btn-signin" @click.prevent="returnLogin">Return to
                     login
@@ -22,55 +22,67 @@
 
 <script>
 
-    import {auth} from '../firebase'
+    //import Firebase from '../firebase'
     import axios from 'axios'
 
     export default {
+        name:"signUp",
+
         data() {
             return {
-                user: "",
-                email: "",
-                password: ""
+                data:{
+                    user: "",
+                    email: "",
+                    password: ""
+                }
             }
         },
         
         methods: {
              signup() {
-                //método para crear un nuevo usuario con firebase
-                 auth.createUserWithEmailAndPassword(this.email, this.password)
-                    .then( (user) => {
-                        //let userID = user.user.uid
-                        console.log(user.user.uid)
-                        alert('¡Tu cuenta se ha creado!');
-                         axios.post('http://localhost:5000/api/users/', {
-                            user: document.getElementById('inputUser').value,
-                            email: document.getElementById('inputEmail').value,
-                            password: document.getElementById('inputPassword').value,
-                            firstName: "Nuevo usuario",
-                            lastName: "Nuevo usuario",
-                            address: "Calle falsa 1,2,3",
-                            phone: "666",
-                            userID: user.user.uid,
-                            enabled: true
-                        }
-                        )
-                            // .then(response => {
-                            // console.log('chévere chévere');
-                            // })
-                            // .catch(err => {
-                            //     console.log(err.message);
-                            // })
-                        //this.$router.replace("/")
-                    },
-                    (error) => {
-                        alert('¡Mecachis!' + error.message)
+                axios.post('http://localhost:5000/api/users', this.data)
+                    .then(res => {
+                    console.log(res)
+                    this.$router.push('/login');
+                    }, err => {
+                    console.log(err.response)
+                    //this.error = err.response.data.error
                     })
+                }
+                // //método para crear un nuevo usuario con firebase
+                //  Firebase.auth.createUserWithEmailAndPassword(this.email, this.password)
+                //     .then( user => {
+                //         //let userID = user.user.uid
+                //         console.log(user.user.uid)
+                //         alert('¡Tu cuenta se ha creado!');
+                //             axios.post('http://localhost:5000/api/users/', {
+                //                 user: document.getElementById('inputUser').value,
+                //                 email: document.getElementById('inputEmail').value,
+                //                 password: document.getElementById('inputPassword').value,
+                //                 firstName: "Nuevo usuario",
+                //                 lastName: "Nuevo usuario",
+                //                 address: "Calle falsa 1,2,3",
+                //                 phone: "666",
+                //                 userID: user.user.uid,
+                //                 enabled: true
+                //             }
+                //         )
+                //             // .then(response => {
+                //             // console.log('chévere chévere');
+                //             // })
+                //             // .catch(err => {
+                //             //     console.log(err.message);
+                //             // })
+                //         this.$router.replace("/timeline")
+                //     },
+                //     error => {
+                //         alert('¡Mecachis!' + error.message)
+                //     })
             },
             returnLogin() {
                 this.$router.replace("/login")
             }
         }
-    }
 </script>
 
 

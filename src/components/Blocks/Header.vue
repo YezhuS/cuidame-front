@@ -14,14 +14,16 @@
 					</router-link>
 				</ul>
 
-				<ul v-if="$store.getters.isAuthUser" class="navbar-nav right">
+				<ul v-if="isLoggedIn" class="navbar-nav right">
 					<router-link 
 					v-for="item in menuH_right_logged"
 					:key="item.id"
 					:to="item.url"
 					tag="li"  
 					class="nav-item">
+						<span class="email black-text">{{currentUser}}</span>
 						<a class="nav-link" href="#">{{item.title}}</a>	
+						<a href="#" @click="logout()" class="btn black">Cerrar sesión</a>
 					</router-link>
 				</ul>
 
@@ -42,14 +44,37 @@
 </template>
 
 <script>
+import Firebase from '../../firebase'
+import { store } from '../../store/store'
 	export default {
-		
 		props: [
 			"title",
 			"menuH_left",
 			"menuH_right_logged",
-			"menuH_right_nologged"]
+			"menuH_right_nologged"],
+
+		data(){
+			return{
+				isLoggedIn: $store.getters.isAuthUser,
+     		currentUser: false
+			}
+		},
+		// created(){
+		// 	if (Firebase.auth().currentUser) {
+		// 		this.isLoggedIn = true;
+		// 		this.currentUser = Firebase.auth().currentUser.email;
+    // 	}
+		methods: {
+			logout: function() {
+			// 		Firebase.auth().signOut()
+			// 			.then(() => {
+			// 				this.$router.replace('/');
+			// 				});
+			}
+		}
 	}
+		
+  	
 </script>
 
 <style>

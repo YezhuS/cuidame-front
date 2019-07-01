@@ -32,7 +32,6 @@
 				],
 				headerNavRightLogged: [
 					{id: 1, url: "/perfil", title: "Perfil"},
-					{id: 2, url: "/", title: "Cerrar Sesión"},
 				],
 				headerNavRightNoLogged: [
 					{id: 1, url: "/login", title: "Iniciar Sesión"},
@@ -43,6 +42,15 @@
 					{id: 2, url: "/", title: "Página dos"},
 				]
 			}
+		},
+		mounted(){
+			onAuthStateChanged((user) => {
+    if (user) {
+       store.commit("startUserSession",user)
+    }else{
+        store.commit("removeUserSession")
+    }
+			});
 		}
 	}
 
