@@ -1,11 +1,22 @@
 <template>
 	<header class="row">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<div class="col-md-12">
+			<div class="col-12">
 			<router-link to="/" id="title" class="navbar-nav">{{title}}</router-link>
 				<ul class="navbar-nav left">
 					<router-link 
 					v-for="item in menuH_left"
+					:key="item.id"
+					:to="item.url"
+					tag="li"  
+					class="nav-item">
+						<a class="nav-link" href="#">{{item.title}}</a>	
+					</router-link>
+				</ul>
+
+					<ul v-if="!isLoggedIn" 	class="navbar-nav right">
+					<router-link 
+					v-for="item in menuH_right_nologged"
 					:key="item.id"
 					:to="item.url"
 					tag="li"  
@@ -21,22 +32,13 @@
 					:to="item.url"
 					tag="li"  
 					class="nav-item">
-						<span class="email black-text">{{currentUser}}</span>
-						<a class="nav-link" href="#">{{item.title}}</a>	
-						<a href="#" @click="logout()" class="btn black">Cerrar sesión</a>
+						<a href="#" class="email black-text">{{currentUser}}</a>
+						<!-- <a href="#" class="nav-link" >{{item.title}}</a>	 -->
+						<a href="#" @click="logout()" class="btn">Cerrar sesión</a>
 					</router-link>
 				</ul>
 
-				<ul v-else class="navbar-nav right">
-					<router-link 
-					v-for="item in menuH_right_nologged"
-					:key="item.id"
-					:to="item.url"
-					tag="li"  
-					class="nav-item">
-						<a class="nav-link" href="#">{{item.title}}</a>	
-					</router-link>
-				</ul>
+			
 			</div>
 
 		</nav>
@@ -44,9 +46,10 @@
 </template>
 
 <script>
-import Firebase from '../../firebase'
 import { store } from '../../store/store'
+import login from '../Login'
 	export default {
+	//	components:[login],
 		props: [
 			"title",
 			"menuH_left",
@@ -55,23 +58,33 @@ import { store } from '../../store/store'
 
 		data(){
 			return{
-				isLoggedIn: $store.getters.isAuthUser,
-     		currentUser: false
+     		
 			}
 		},
+			methods: {
+			logout(){
+				store.dispatch('logout').then(()=>{
+					this.$router.replace('/')
+				})
+			} 
+		},
+		//nos sirve como los datos pero recarga directamente al hacer la acción
+		computed:{
+				isLoggedIn: function(){
+					return store.getters.isAuth
+				},
+				currentUser: function(){
+					return store.getters.dataProfile
+				}
+		},
+		//se hace la acción al cambiar de componentes (como cambiar de pestañas)
+		//mounted(){
+
+		//},
 		// created(){
-		// 	if (Firebase.auth().currentUser) {
-		// 		this.isLoggedIn = true;
-		// 		this.currentUser = Firebase.auth().currentUser.email;
-    // 	}
-		methods: {
-			logout: function() {
-			// 		Firebase.auth().signOut()
-			// 			.then(() => {
-			// 				this.$router.replace('/');
-			// 				});
-			}
-		}
+		// 	$emit(this.isLoggedIn = true)
+		// },
+	
 	}
 		
   	
@@ -85,7 +98,7 @@ import { store } from '../../store/store'
 
 	#title{
 		clear: both;
-		font-size: 5;
+		font-size: 50;
 	}
 /* HELPERS */
 	.left{

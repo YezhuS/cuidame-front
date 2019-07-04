@@ -3,7 +3,7 @@
 	<form class="col-6">
 		<div class="form-group row">
 			<div class="col-sm-9">
-				<input type="hidden" name="" id="user" class="form-control" v-model='data.user'>
+				<input type="hidden" name="" id="user" class="form-control" v-model='news.user'>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -20,12 +20,12 @@
 			</div>
 		</div>
 
-		<div class="form-group row">
+		<!-- <div class="form-group row">
 			<label for="" class="col-sm-3">Añadir fotos</label>
 			<div class="col-sm-9">
 				<input type="file" name="" id="photo" class="">
 			</div>
-		</div>
+		</div> -->
 
 		<div class="form-group row">
 			<label for="" class="col-sm-3">¿Dónde se encuentra?</label>
@@ -42,7 +42,7 @@
 		</div>
 
 		<div class="form-group row">
-			<button class="btn btn-dark btn-block" type="submit" @click.prevent='created'>Add New Article</button>
+			<button class="btn btn-dark btn-block" type="submit" @click.prevent='createdPost'>Add New Article</button>
 		</div>
 	</form>
 	
@@ -51,14 +51,14 @@
 </template>
 
 <script>
-//import PostService from "../PostService"
 import axios from 'axios'
+import { store } from '../store/store'
 
 let emptyNew = {
   title: "",
   type: "",
   time: "",
-  user: "Admin",
+  user: "",
 	place: "",
 	rol: "",
 	description: ""
@@ -72,36 +72,43 @@ let emptyNew = {
 				data: {
 					user: ""
 				},
-				error:''
+				error:'',
+
+				id: store.getters.userId
 			}
 		},
-		async created(){
-			await	axios.get('http://localhost:5000/api/users/')
-				.then(response => {
-					this.data.user = JSON.stringify(response.data[0].user.user)
-				})
-				.catch(err => {
-
-				})
-		},
+		// created(){
+		// 	axios.get('http://localhost:5000/api/users/')
+		// 		.then(response => {
+		// 			console.log(response)
+		// 			//this.id = this._uid
+		// 			this.id = store.getters.userId
+		// 		})
+		// 		.catch(err => {
+		// 			alert(err.message)
+		// 		})
+		// },
+		// mounted(){
+		// 	this.id = this._uid
+		// },
 		methods:{
-		 	created(){
+		 	createdPost(){
 			 axios.post('http://localhost:5000/api/posts/', {
 				title: document.getElementById('head').value,
 				type: document.getElementById('type').value,
-				//user: "document.getElementById('user').value",
 				description: document.getElementById('description').value,
 				place: document.getElementById('place').value,
+				user: this.id,
 				enabled: true
-			
 			})
-					.then(response => {
-						console.log("Ole tus cojones pelirrojos!");
+				.then(response => {
+						console.log("Post hecho");
+						this.$route.replace('/timeline')
 					})
 					.catch(err => {
 						this.error = err.message;
 					})
-			}
+			 }
 		}
 		
 		// 	async createPost(){

@@ -19,15 +19,16 @@
 
 <script>
 
-    //import Firebase from '../firebase'
     import axios from 'axios'
+    import {store} from '../store/store'
 
     export default {
         name: "login",
         data() {
             return {
                 email: "",
-                password: ""
+                password: "",
+                id:""
             }
         },
         methods: {
@@ -36,24 +37,22 @@
                     email: this.email,
                     password: this.password
                 }
-                axios.post('http://localhost:5000/api/auth/login', user)
-                    .then(res => {
-                    //if successfull
-                    if (res.status === 200) {
-                        console.log(res.data)
-                        localStorage.setItem('token', res.data.token);
-                        this.$router.push('/');
-                    }
-                    }, err => {
-                    alert(err.response);
-                    //this.error = err.response.data.error
-                    })
-                }
-            },
-            signUp() {
+                store.dispatch('login', user).then(()=>{
+                    this.id = this._uid
+                    console.log('Olé, ya estás dentro!')
+                    this.$router.replace("/");
+                })
+               
+
+                },
+                signUp() {
                 this.$router.replace("/signUp")
-            }
-        }
+                }
+            
+            },
+            
+  }
+        
 </script>
 
 

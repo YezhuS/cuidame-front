@@ -17,10 +17,10 @@
        <div class="card-body">
         <span class="card-title"><h6>👁‍🗨 {{post.place}}</h6></span><br>
         <p class="card-text">{{post.description}}</p>
-        <span class="card-text"><small>{{post.user.user}}</small></span>
+        <span class="card-text"><small>{{post.user.user}} </small></span>
       </div>
     </div>
-    <div class="col-sm-2">
+    <div class="col-2">
       <img src="https://via.placeholder.com/150" class="card-img" alt="">
     </div>
     </div>
@@ -78,3 +78,9 @@ export default {
   // }
 }
 </script>
+
+<style scoped>
+
+
+
+</style>

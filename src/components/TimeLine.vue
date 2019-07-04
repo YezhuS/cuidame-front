@@ -1,9 +1,9 @@
 <template>
-	<div>
-		<h2>	Aquí tendremos la main con las noticias </h2>
-		
+	<div id="body">
+		<article id="new">
 				<NewArticle/>
-		</div>
+		</article>
+	</div>
 </template>
 
 <script>
@@ -21,8 +21,12 @@ export default {
 }
 </script>
 
-<style>
-#newArticle{
-	margin: 20px
+<style scoped>
+
+#body{
+	margin: 30px
+}
+#new{
+	margin: 100px
 }
 </style>

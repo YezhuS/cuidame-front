@@ -13,13 +13,13 @@ import Error404 from "./components/Error404"
 
 export const routes = [
 	{path: "/", component: Home, },
-	{path: "/login", component: Login, },
+	{path: "/login", component: Login, name: "login"},
 	{path: "/signUp", component: SignUp, },
 	{path: "/timeline", component: TimeLine, },
 	{path: "/about", component: About, },
 	{path: "/tutorial", component: Tutorial, },
-	{path: "/perfil", component: Perfil, },
-	{path: "/createarticle", component: CreateArticle, },
+	{path: "/perfil", component: Perfil, meta:{requiresAuth:true}},
+	{path: "/createarticle", component: CreateArticle, meta: {requiresAuth:true}},
 	{path: "*", redirect: "/", }
 
 ]

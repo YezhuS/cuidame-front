@@ -2,7 +2,7 @@
   <div id="app">
   		<Header :title="headerTitle" :menuH_left="headerNavLeft" :menuH_right_logged="headerNavRightLogged" :menuH_right_nologged="headerNavRightNoLogged"/>
 
-  	<div>
+  	<div id="body">
   		<router-view></router-view>
 		</div>
 
@@ -23,12 +23,9 @@
 		},
 		data(){
 			return {
-				headerTitle: "Nombre de la APP",
+				headerTitle: "Cuídame",
 				headerNavLeft: [
 					{id: 1, url: "/timeline", title: "Novedades"},
-					{id: 2, url: "/", title: "Adopción"},
-					{id: 3, url: "/perfil", title: "Perfil"},
-					{id: 4, url: "/createarticle", title: "Nueva noticia"},
 				],
 				headerNavRightLogged: [
 					{id: 1, url: "/perfil", title: "Perfil"},
@@ -39,23 +36,16 @@
 				],
 				footerNav: [
 					{id: 1, url: "/about", title: "Sobre mí"},
-					{id: 2, url: "/", title: "Página dos"},
 				]
 			}
-		},
-		mounted(){
-			onAuthStateChanged((user) => {
-    if (user) {
-       store.commit("startUserSession",user)
-    }else{
-        store.commit("removeUserSession")
-    }
-			});
 		}
 	}
 
 </script>
 
 <style>
+
+
+
 
 </style>

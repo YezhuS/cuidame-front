@@ -1,8 +1,8 @@
 <template>
 	<div class="box">
-	<form>
+	<form class="form">
 		<!-- Quiero que se pueda cambiar la foto principal que será vista en el perfil y los anuncios -->
-		<div  v-for="(post, index) in posts" :item="post" :index="index" :key="post.id" >
+		<!-- <div  v-for="(post, index) in posts" :item="post" :index="index" :key="post.id" > -->
 			<!-- <div> 
 			<img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
 					<input type="file">
@@ -11,13 +11,13 @@
 		<div class="form-group row" >
 			<label for="" class="col-sm-3">Usuario</label>
 			<div class="col-sm-4">
-				<input type="text" name="" id="" class="form-control" v-model="post.user">
+				<input type="text" name="" id="" class="form-control" v-model="users.user">
 			</div>
 		</div>
 			<div class="form-group row">
 			<label for="" class="col-sm-3">Contraseña</label>
 			<div class="col-sm-4">
-				<input type="password" name="" id="" class="form-control"  v-model="post.password">
+				<input type="password" name="" id="" class="form-control"  v-model="users.password">
 			</div>
 		</div>
 		<div id="Personal">
@@ -26,13 +26,13 @@
 				<label for="" class="col-sm-3">Nombre</label>
 				<div class="col-sm-4">
 					<input type="text" name="" id="" class="form-control"
-					v-model="post.firstName">
+					v-model="users.firstName">
 				</div>
 			</div>
 				<!-- <div class="form-group row">
 				<label for="" class="col-sm-3">Ciudad/municipio actual</label>
 				<div class="col-sm-4">
-					<input type="text" name="" id="" class="form-control" v-model="post.city">
+					<input type="text" name="" id="" class="form-control" v-model="users.city">
 				</div> 
 			</div>-->
 				<!-- <div class="form-group row">
@@ -46,13 +46,13 @@
 				<div class="form-group row">
 					<label for="" class="col-sm-3">Email</label>
 					<div class="col-sm-4">
-						<input type="email" name="" id="" class="form-control"  v-model="post.email">
+						<input type="email" name="" id="" class="form-control"  v-model="users.email">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="" class="col-sm-3">Móvil</label>
 					<div class="col-sm-4">
-						<input type="text" name="" id="" class="form-control" v-model="post.phone">
+						<input type="text" name="" id="" class="form-control" v-model="users.phone">
 					</div>
 				</div>
 				<!-- <div class="form-group row">
@@ -71,7 +71,7 @@
 		</div>
 		<div class="form-group row">
 			<label for="" class="col-sm-3">¿Qué soy? Tipo de Usuario</label>
-		<select class="custom-select" id="role" v-model="post.role">
+		<select class="custom-select col-4" id="role" v-model="users.role">
 			<option selected>Choose...</option>
 			<option value="User">Particular</option>
 			<option value="House">Casa de acogida</option>
@@ -81,11 +81,11 @@
 		<div class="form-group row">
 			<label for="" class="col-sm-3">Dirección</label>
 			<div class="col-sm-4">
-				<input type="text" name="" id="" class="form-control" v-model="post.address">
+				<input type="text" name="" id="" class="form-control" v-model="users.address">
 			</div>
 		</div>
-			<div id="Animal">
-				<h3>Mis pequeños</h3>
+			<!-- <div id="Animal">
+				<h3>Mis pequeños</h3> -->
 				<!-- Activado solo si da en adopción -->
 					<!-- <div class="form-group row">
 						<label for="" class="col-sm-3">Nombre</label>
@@ -103,35 +103,38 @@
 					<img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"/>
 					<input type="file">
 				</div> -->
-		</div>
-
-		<div class="form-group row">
+		<!-- </div> -->
+	<div class="form-group row justify-content-between">
+		<div class="form-group col-3">
 			<button class="btn btn-dark" type="button" @click.prevent="toCreateArticle">New Article</button>
 		</div>
-		<div class="form-group row">
+		<!-- <div class="form-group col-3">
 			<button class="btn btn-danger" type="button" @click="counterReport()">Reportar</button>
 			<p>{{ totalReportes }}</p>
-		</div>
-		<div class="form-group row">
-			<button class="btn btn-blue" type="submit" @click.prevent="putData(post._id)">Guardar cambios</button>
+		</div> -->
+		<div class="form-group col-3">
+			<button class="btn btn-warning" type="submit"  @click.prevent="putData(users._id)">Guardar cambios</button>
 
 		</div>
-		<p>Aquí vendría algo como POPULARIDAD que viene a ser los votos recibidos</p>
-		</div>
+	</div>
+		<!-- <p>Aquí vendría algo como POPULARIDAD que viene a ser los votos recibidos</p> -->
+		<!-- </div> -->
 	</form>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { store } from '../store/store'
 
 let url = 'http://localhost:5000/api/users/'
+let userId = store.getters.userId
 
 	export default {
 		data(){
 			return {
 				totalReportes: 0,
-				posts:[],
+				users:{},
 				data:{
 					user: "",
 					email: "",
@@ -144,11 +147,16 @@ let url = 'http://localhost:5000/api/users/'
 				error:""
 			}
 		},
-		async created(){
-			await axios.get(url)//`${url}{id}`
+		// computed:{
+		// 	userId: function(){
+		// 		return store.getters.userId
+		// 	}
+		// },
+		created(){
+			axios.get(`${url}${userId}`)//
 				.then(response => {
 					console.log(response)
-					this.posts = response.data
+					this.users = response.data
 				})
 				.catch(err => {
 					console.log(err.message)
@@ -162,11 +170,12 @@ let url = 'http://localhost:5000/api/users/'
 				return this.totalReportes += 1
 			},
 			putData(id){
-				axios.put(`${url}{id}`, this.data)
+				axios.put(`${url}${id}`, this.users)
 					.then(response => {
-						console.log('Bien hecho canijo');
-						alert('Gracias por tus datos, ahora tu alma forma parte del diablo. ¡Enhorabuena!')
+						console.log(response);
 						this.data = response.data
+						alert('Gracias por tus datos, ahora tu alma forma parte del diablo. ¡Enhorabuena!')
+						
 					})
 					.catch(err => {
 						this.error = err.message
@@ -177,15 +186,25 @@ let url = 'http://localhost:5000/api/users/'
 	}
 </script>
 
-<style>
+<style scoped>
 #Personal{
-	border: solid black 2px;
+	border-style: solid;
+	border-color: black;
+  border-width: 2px 0;
 }
 #Contact{
-	border: solid black 2px;
 	border-style: dashed double none;
+	border-color: black;
+  border-width: 2px 0;
 }
-#Animal{
+/* #Animal{
+	border: solid black 2px;
+} */
+.box{
+	margin: 0 15px 0 15px 
+}
+.form{
+	margin: 30px;
 	border: solid black 2px;
 }
 

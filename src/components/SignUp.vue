@@ -22,8 +22,8 @@
 
 <script>
 
-    //import Firebase from '../firebase'
     import axios from 'axios'
+    import {store} from '../store/store'
 
     export default {
         name:"signUp",
@@ -40,47 +40,16 @@
         
         methods: {
              signup() {
-                axios.post('http://localhost:5000/api/users', this.data)
-                    .then(res => {
-                    console.log(res)
-                    this.$router.push('/login');
-                    }, err => {
-                    console.log(err.response)
-                    //this.error = err.response.data.error
-                    })
-                }
-                // //método para crear un nuevo usuario con firebase
-                //  Firebase.auth.createUserWithEmailAndPassword(this.email, this.password)
-                //     .then( user => {
-                //         //let userID = user.user.uid
-                //         console.log(user.user.uid)
-                //         alert('¡Tu cuenta se ha creado!');
-                //             axios.post('http://localhost:5000/api/users/', {
-                //                 user: document.getElementById('inputUser').value,
-                //                 email: document.getElementById('inputEmail').value,
-                //                 password: document.getElementById('inputPassword').value,
-                //                 firstName: "Nuevo usuario",
-                //                 lastName: "Nuevo usuario",
-                //                 address: "Calle falsa 1,2,3",
-                //                 phone: "666",
-                //                 userID: user.user.uid,
-                //                 enabled: true
-                //             }
-                //         )
-                //             // .then(response => {
-                //             // console.log('chévere chévere');
-                //             // })
-                //             // .catch(err => {
-                //             //     console.log(err.message);
-                //             // })
-                //         this.$router.replace("/timeline")
-                //     },
-                //     error => {
-                //         alert('¡Mecachis!' + error.message)
-                //     })
-            },
-            returnLogin() {
-                this.$router.replace("/login")
+                store.dispatch('signup', this.data).then(()=>{
+                    console.log('¡Tu cuenta se ha creado, cabesah!')
+                    this.$router.replace('/login');
+
+                })
+                },
+                returnLogin() {
+                 this.$router.replace("/login")
+            }
+           
             }
         }
 </script>
