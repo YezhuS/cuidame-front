@@ -114,9 +114,9 @@ export const store = new Vuex.Store({
     isAuth: state => !!state.token,
     authStatus: state => state.status,
     dataProfile: state => state.dataProfile,
-    // userId: state => {
-    //   let objToken = jwt_decode(state.token)
-    //   return objToken.id
-    // } 
+    userId: state => {
+      let objToken = jwt_decode(state.token)
+      return objToken.id
+    } 
    }
   })

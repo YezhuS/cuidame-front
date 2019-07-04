@@ -25,8 +25,13 @@
     </div>
     </div>
     <div class="card-footer">
-      <button type="button" class="btn btn-success">Contactar</button>
-      <button type="button" class="btn btn-danger" @click.prevent="deletePost(post._id)">Delete</button>
+      <h4 class="green"><strong><u>Contactar</u></strong></h4>
+        <p class="my-4"><strong>Correo: </strong> {{post.user.email}}</p>
+        <p class="my-4"><strong>Móvil: </strong> {{post.user.phone}}</p>
+
+    <button class="btn btn-danger" @click.prevent="deletePost(post._id)">Eliminar</button>
+
+      
     </div>
   </div>
   </div>
@@ -58,7 +63,8 @@ export default {
           console.log(err.message);
         })
     }
-  },
+     
+    },
 
   async created(){
     await axios.get(url)
@@ -81,6 +87,8 @@ export default {
 
 <style scoped>
 
-
+.green{
+  color: rgb(78, 119, 161)
+}
 
 </style>
